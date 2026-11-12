@@ -10,6 +10,8 @@ import 'package:video_player/video_player.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'youtube_embed_stub.dart'
     if (dart.library.js_interop) 'youtube_embed_web.dart';
+import 'web_download_stub.dart'
+    if (dart.library.js_interop) 'web_download_web.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -302,9 +304,10 @@ class _ApodPageState extends State<ApodPage> {
   DateTime? _selectedDate; // No nulo cuando el usuario elige fecha en el calendario
   String _currentDateDisplay = '';
 
-  // Estado de traducción
+  // Estado de traducción y descarga
   bool _showSpanish = false;
   bool _isTranslating = false;
+  bool _isDownloadingImage = false;
   final Map<String, String> _spanishExplanations = {};
   final Map<String, String> _spanishTitles = {};
 
@@ -664,6 +667,70 @@ class _ApodPageState extends State<ApodPage> {
     }
   }
 
+  Future<void> _downloadImage(Apod apod) async {
+    if (_isDownloadingImage) return;
+    final rawUrl = apod.hdurl.isNotEmpty ? apod.hdurl : apod.url;
+    final uri = Uri.tryParse(rawUrl);
+    if (uri == null || rawUrl.isEmpty) return;
+
+    setState(() => _isDownloadingImage = true);
+
+    try {
+      final pathLower = uri.path.toLowerCase();
+      var ext = 'jpg';
+      var mimeType = 'image/jpeg';
+      if (pathLower.endsWith('.png')) {
+        ext = 'png';
+        mimeType = 'image/png';
+      } else if (pathLower.endsWith('.webp')) {
+        ext = 'webp';
+        mimeType = 'image/webp';
+      } else if (pathLower.endsWith('.gif')) {
+        ext = 'gif';
+        mimeType = 'image/gif';
+      }
+
+      final safeDate = apod.date.isNotEmpty ? apod.date : 'apod';
+      final filename = 'nasa_apod_$safeDate.$ext';
+
+      if (kIsWeb) {
+        final response =
+            await http.get(uri).timeout(const Duration(seconds: 25));
+        if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+          triggerWebDownload(response.bodyBytes, filename, mimeType);
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(
+                    color: const Color(0xFFF4A8C3).withValues(alpha: 0.25),
+                  ),
+                ),
+                content: Text(
+                  'Imagen descargada: $filename',
+                  style: const TextStyle(color: Color(0xFFFCF4F7)),
+                ),
+                duration: const Duration(seconds: 2),
+                backgroundColor: const Color(0xFF331D2C),
+              ),
+            );
+          }
+          return;
+        }
+      }
+
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } finally {
+      if (mounted) {
+        setState(() => _isDownloadingImage = false);
+      }
+    }
+  }
+
   void _openImageZoom(BuildContext context, Apod apod) {
     showDialog(
       context: context,
@@ -697,12 +764,28 @@ class _ApodPageState extends State<ApodPage> {
               Positioned(
                 top: 10,
                 right: 10,
-                child: IconButton.filled(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.black.withValues(alpha: 0.6),
-                  ),
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton.filled(
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.black.withValues(alpha: 0.65),
+                      ),
+                      tooltip: 'Descargar imagen HD',
+                      icon: const Icon(Icons.download_rounded,
+                          color: Color(0xFFF9C8DA)),
+                      onPressed: () => _downloadImage(apod),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton.filled(
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.black.withValues(alpha: 0.65),
+                      ),
+                      tooltip: 'Cerrar',
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
                 ),
               ),
               Positioned(
@@ -1237,6 +1320,54 @@ class _ApodPageState extends State<ApodPage> {
                     ),
 
                   const SizedBox(height: 12),
+
+                  if (a.mediaType == 'image') ...[
+                    Row(
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: _isDownloadingImage
+                              ? null
+                              : () => _downloadImage(a),
+                          icon: _isDownloadingImage
+                              ? const SizedBox(
+                                  width: 15,
+                                  height: 15,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFFF9C8DA),
+                                    ),
+                                  ),
+                                )
+                              : const Icon(Icons.download_rounded, size: 17),
+                          label: Text(
+                            _isDownloadingImage
+                                ? 'Descargando...'
+                                : 'Descargar imagen',
+                            style: const TextStyle(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFFFCF4F7),
+                            backgroundColor:
+                                const Color(0xFF281723).withValues(alpha: 0.86),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 10),
+                            side: BorderSide(
+                              color: const Color(0xFFF4A8C3)
+                                  .withValues(alpha: 0.32),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ],
 
                   // Metadata chips (Créditos y tipo de medio)
                   Wrap(
