@@ -30,24 +30,29 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF090D16),
+        scaffoldBackgroundColor: const Color(0xFF1A0E17),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6366F1),
+          seedColor: const Color(0xFFF4A8C3),
           brightness: Brightness.dark,
-          surface: const Color(0xFF131B2E),
+          primary: const Color(0xFFF4A8C3),
+          onPrimary: const Color(0xFF23101B),
+          surface: const Color(0xFF281723),
         ),
         cardTheme: CardThemeData(
-          color: const Color(0xFF131B2E),
+          color: const Color(0xFF281723).withValues(alpha: 0.86),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
+            borderRadius: BorderRadius.circular(14),
+            side: BorderSide(
+              color: const Color(0xFFF4A8C3).withValues(alpha: 0.18),
+            ),
           ),
         ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF090D16),
+        appBarTheme: AppBarTheme(
+          backgroundColor: const Color(0xFF1A0E17).withValues(alpha: 0.88),
           elevation: 0,
           scrolledUnderElevation: 0,
+          surfaceTintColor: Colors.transparent,
         ),
       ),
       home: const ApodPage(),
@@ -510,10 +515,10 @@ class _ApodPageState extends State<ApodPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.dark(
-              primary: Color(0xFF6366F1),
-              onPrimary: Colors.white,
-              surface: Color(0xFF131B2E),
-              onSurface: Colors.white,
+              primary: Color(0xFFF4A8C3),
+              onPrimary: Color(0xFF23101B),
+              surface: Color(0xFF281723),
+              onSurface: Color(0xFFFCF4F7),
             ),
           ),
           child: child!,
@@ -532,20 +537,27 @@ class _ApodPageState extends State<ApodPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: const Color(0xFFF4A8C3).withValues(alpha: 0.25),
+          ),
+        ),
         content: Row(
           children: [
-            const Icon(Icons.rocket_launch, color: Colors.amberAccent, size: 20),
+            const Icon(Icons.shuffle_rounded,
+                color: Color(0xFFF4A8C3), size: 18),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Viajando en el archivo cósmico (#$randomPage de $_totalPages) 🚀',
+                'Cargando registro #$randomPage de $_totalPages',
+                style: const TextStyle(color: Color(0xFFFCF4F7)),
               ),
             ),
           ],
         ),
         duration: const Duration(seconds: 2),
-        backgroundColor: const Color(0xFF1E293B),
+        backgroundColor: const Color(0xFF331D2C),
       ),
     );
   }
@@ -569,7 +581,7 @@ class _ApodPageState extends State<ApodPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color(0xFF1E293B),
+          backgroundColor: const Color(0xFF331D2C),
           content: Text('No se pudo abrir el reproductor: $raw'),
         ),
       );
@@ -624,7 +636,7 @@ class _ApodPageState extends State<ApodPage> {
               ],
             ),
             duration: const Duration(seconds: 2),
-            backgroundColor: const Color(0xFF1E293B),
+            backgroundColor: const Color(0xFF331D2C),
           ),
         );
       }
@@ -645,7 +657,7 @@ class _ApodPageState extends State<ApodPage> {
               ],
             ),
             duration: const Duration(seconds: 3),
-            backgroundColor: const Color(0xFF1E293B),
+            backgroundColor: const Color(0xFF331D2C),
           ),
         );
       }
@@ -675,7 +687,7 @@ class _ApodPageState extends State<ApodPage> {
                       if (progress == null) return child;
                       return const Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFF6366F1),
+                          color: Color(0xFFF4A8C3),
                         ),
                       );
                     },
@@ -728,33 +740,24 @@ class _ApodPageState extends State<ApodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: false,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         titleSpacing: 16,
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                ),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.35),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                color: const Color(0xFFF4A8C3),
+                borderRadius: BorderRadius.circular(6),
               ),
               child: const Text(
                 'NASA',
                 style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12,
-                  letterSpacing: 1.2,
-                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 11,
+                  letterSpacing: 1.4,
+                  color: Color(0xFF23101B),
                 ),
               ),
             ),
@@ -762,102 +765,94 @@ class _ApodPageState extends State<ApodPage> {
             const Text(
               'Foto Astronómica',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                fontSize: 17,
                 letterSpacing: 0.2,
+                color: Color(0xFFFCF4F7),
               ),
             ),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_month_rounded,
-                color: Color(0xFF818CF8)),
+            icon: const Icon(Icons.calendar_today_outlined,
+                size: 20, color: Color(0xFFF9C8DA)),
             tooltip: 'Elegir fecha',
             onPressed: _pickDate,
           ),
           IconButton(
-            icon: const Icon(Icons.casino_outlined, color: Colors.amberAccent),
-            tooltip: 'Fecha Aleatoria',
+            icon: const Icon(Icons.shuffle_rounded,
+                size: 20, color: Color(0xFFF9C8DA)),
+            tooltip: 'Fecha aleatoria',
             onPressed: _randomPhoto,
           ),
           IconButton(
-            icon: const Icon(Icons.refresh_rounded),
+            icon: const Icon(Icons.refresh_rounded,
+                size: 20, color: Color(0xFFE2C6D2)),
             tooltip: 'Recargar',
             onPressed: _reloadCurrent,
           ),
           const SizedBox(width: 6),
         ],
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF090D16),
-              Color(0xFF0F172A),
-              Color(0xFF090D16),
-            ],
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/cats_paw_nebula.jpg',
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
           ),
-        ),
-        child: FutureBuilder<Apod>(
-          future: _future,
-          builder: (context, snap) {
-            if (snap.connectionState != ConnectionState.done) {
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color(0xFF1A0E17).withValues(alpha: 0.72),
+                    const Color(0xFF22111D).withValues(alpha: 0.76),
+                    const Color(0xFF160B13).withValues(alpha: 0.88),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: FutureBuilder<Apod>(
+              future: _future,
+              builder: (context, snap) {
+                if (snap.connectionState != ConnectionState.done) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF6366F1)
-                                    .withValues(alpha: 0.25),
-                                blurRadius: 20,
-                                spreadRadius: 4,
-                              ),
-                            ],
-                          ),
-                        ),
                         const SizedBox(
-                          width: 48,
-                          height: 48,
+                          width: 42,
+                          height: 42,
                           child: CircularProgressIndicator(
-                            strokeWidth: 3.5,
+                            strokeWidth: 2.8,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Color(0xFF6366F1),
+                              Color(0xFFF4A8C3),
                             ),
                           ),
                         ),
-                        const Icon(
-                          Icons.rocket_launch,
-                          size: 20,
-                          color: Color(0xFF818CF8),
+                        const SizedBox(height: 18),
+                        const Text(
+                          'Cargando fotografía...',
+                          style: TextStyle(
+                            color: Color(0xFFFCF4F7),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Explorando el cosmos...',
-                      style: TextStyle(
-                        color: Colors.grey.shade300,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Descargando fotografía de la NASA',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
+                        const SizedBox(height: 4),
+                        Text(
+                          'Consultando archivo de la NASA',
+                          style: TextStyle(
+                            color: const Color(0xFFE2C6D2)
+                                .withValues(alpha: 0.8),
                         fontSize: 13,
                       ),
                     ),
@@ -871,7 +866,7 @@ class _ApodPageState extends State<ApodPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Card(
-                    color: const Color(0xFF131B2E),
+                    color: const Color(0xFF281723),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
@@ -920,13 +915,14 @@ class _ApodPageState extends State<ApodPage> {
                             children: [
                               FilledButton.icon(
                                 style: FilledButton.styleFrom(
-                                  backgroundColor: const Color(0xFF6366F1),
+                                  backgroundColor: const Color(0xFFF4A8C3),
+                                  foregroundColor: const Color(0xFF23101B),
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 20,
                                     vertical: 12,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
                                 onPressed: _reloadCurrent,
@@ -963,15 +959,15 @@ class _ApodPageState extends State<ApodPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Barra de Navegación de Fechas estilo Glassmorphism
+                  // Barra de Navegación de Fechas
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF131B2E),
-                      borderRadius: BorderRadius.circular(16),
+                      color: const Color(0xFF281723).withValues(alpha: 0.86),
+                      borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.08),
+                        color: const Color(0xFFF4A8C3).withValues(alpha: 0.2),
                       ),
                     ),
                     child: Row(
@@ -982,17 +978,18 @@ class _ApodPageState extends State<ApodPage> {
                           icon: const Icon(Icons.chevron_left_rounded, size: 18),
                           label: const Text('Anterior'),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.white,
+                            foregroundColor: const Color(0xFFFCF4F7),
                             disabledForegroundColor: Colors.white24,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             side: BorderSide(
                               color: _canGoPrevious
-                                  ? Colors.white.withValues(alpha: 0.16)
+                                  ? const Color(0xFFF4A8C3)
+                                      .withValues(alpha: 0.28)
                                   : Colors.white10,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                         ),
@@ -1000,20 +997,21 @@ class _ApodPageState extends State<ApodPage> {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: _pickDate,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(8),
                             child: Tooltip(
-                              message: 'Toca para elegir una fecha en el calendario',
+                              message:
+                                  'Seleccionar fecha en el calendario',
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF6366F1)
-                                      .withValues(alpha: 0.18),
-                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xFFF4A8C3)
+                                      .withValues(alpha: 0.14),
+                                  borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: const Color(0xFF6366F1)
+                                    color: const Color(0xFFF4A8C3)
                                         .withValues(alpha: 0.35),
                                   ),
                                 ),
@@ -1021,9 +1019,9 @@ class _ApodPageState extends State<ApodPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const Icon(
-                                      Icons.calendar_today_rounded,
+                                      Icons.calendar_today_outlined,
                                       size: 13,
-                                      color: Color(0xFF818CF8),
+                                      color: Color(0xFFF9C8DA),
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
@@ -1032,7 +1030,7 @@ class _ApodPageState extends State<ApodPage> {
                                           : _currentDateDisplay,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w600,
-                                        color: Color(0xFFC7D2FE),
+                                        color: Color(0xFFFCF4F7),
                                         fontSize: 13,
                                         letterSpacing: 0.3,
                                       ),
@@ -1043,17 +1041,18 @@ class _ApodPageState extends State<ApodPage> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 6, vertical: 1),
                                         decoration: BoxDecoration(
-                                          color: const Color(0xFF22C55E)
-                                              .withValues(alpha: 0.2),
+                                          color: const Color(0xFFF4A8C3)
+                                              .withValues(alpha: 0.24),
                                           borderRadius:
-                                              BorderRadius.circular(6),
+                                              BorderRadius.circular(4),
                                         ),
                                         child: const Text(
                                           'HOY',
                                           style: TextStyle(
-                                            color: Color(0xFF4ADE80),
+                                            color: Color(0xFFF9C8DA),
                                             fontSize: 10,
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 0.5,
                                           ),
                                         ),
                                       ),
@@ -1062,7 +1061,7 @@ class _ApodPageState extends State<ApodPage> {
                                       const Icon(
                                         Icons.arrow_drop_down_rounded,
                                         size: 16,
-                                        color: Color(0xFF818CF8),
+                                        color: Color(0xFFF9C8DA),
                                       ),
                                     ],
                                   ],
@@ -1073,20 +1072,22 @@ class _ApodPageState extends State<ApodPage> {
                         ),
                         OutlinedButton.icon(
                           onPressed: _canGoNext ? _goNext : null,
-                          icon: const Icon(Icons.chevron_right_rounded, size: 18),
+                          icon:
+                              const Icon(Icons.chevron_right_rounded, size: 18),
                           label: const Text('Siguiente'),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.white,
+                            foregroundColor: const Color(0xFFFCF4F7),
                             disabledForegroundColor: Colors.white24,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             side: BorderSide(
                               color: _canGoNext
-                                  ? Colors.white.withValues(alpha: 0.16)
+                                  ? const Color(0xFFF4A8C3)
+                                      .withValues(alpha: 0.28)
                                   : Colors.white10,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                         ),
@@ -1128,21 +1129,21 @@ class _ApodPageState extends State<ApodPage> {
                                     if (progress == null) return child;
                                     return Container(
                                       height: 300,
-                                      color: const Color(0xFF131B2E),
+                                      color: const Color(0xFF281723),
                                       alignment: Alignment.center,
                                       child: CircularProgressIndicator(
                                         value: progress.expectedTotalBytes != null
                                             ? progress.cumulativeBytesLoaded /
                                                 progress.expectedTotalBytes!
                                             : null,
-                                        color: const Color(0xFF6366F1),
+                                        color: const Color(0xFFF4A8C3),
                                       ),
                                     );
                                   },
                                   errorBuilder: (context, error, stackTrace) =>
                                       Container(
                                     height: 240,
-                                    color: const Color(0xFF131B2E),
+                                    color: const Color(0xFF281723),
                                     alignment: Alignment.center,
                                     child: const Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -1321,16 +1322,16 @@ class _ApodPageState extends State<ApodPage> {
 
                   const SizedBox(height: 16),
 
-                  // Tarjeta de Explicación con Botón de Traducción Profesional
+                  // Tarjeta de Explicación con Botón de Traducción
                   Card(
-                    color: const Color(0xFF131B2E),
+                    color: const Color(0xFF281723).withValues(alpha: 0.86),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(14),
                       side: BorderSide(
                         color: _showSpanish
-                            ? const Color(0xFF6366F1).withValues(alpha: 0.4)
-                            : Colors.white.withValues(alpha: 0.08),
+                            ? const Color(0xFFF4A8C3).withValues(alpha: 0.45)
+                            : const Color(0xFFF4A8C3).withValues(alpha: 0.18),
                       ),
                     ),
                     child: Padding(
@@ -1344,14 +1345,14 @@ class _ApodPageState extends State<ApodPage> {
                               Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF6366F1)
+                                  color: const Color(0xFFF4A8C3)
                                       .withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Icon(
-                                  Icons.menu_book_rounded,
+                                  Icons.article_outlined,
                                   size: 18,
-                                  color: Color(0xFF818CF8),
+                                  color: Color(0xFFF9C8DA),
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -1359,8 +1360,8 @@ class _ApodPageState extends State<ApodPage> {
                                 'Explicación',
                                 style: TextStyle(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFFFCF4F7),
                                 ),
                               ),
                               const Spacer(),
@@ -1378,22 +1379,23 @@ class _ApodPageState extends State<ApodPage> {
                                           strokeWidth: 2,
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
-                                            Colors.white,
+                                            Color(0xFF23101B),
                                           ),
                                         ),
                                       )
                                     : Icon(
-                                        _showSpanish
-                                            ? Icons.translate_rounded
-                                            : Icons.g_translate_rounded,
-                                        size: 16,
+                                        Icons.translate_rounded,
+                                        size: 15,
+                                        color: _showSpanish
+                                            ? const Color(0xFF23101B)
+                                            : const Color(0xFFF9C8DA),
                                       ),
                                 label: Text(
                                   _isTranslating
                                       ? 'Traduciendo...'
                                       : (_showSpanish
                                           ? 'Original (EN)'
-                                          : 'Traducir a Español'),
+                                          : 'Traducir (ES)'),
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -1401,18 +1403,21 @@ class _ApodPageState extends State<ApodPage> {
                                 ),
                                 style: FilledButton.styleFrom(
                                   backgroundColor: _showSpanish
-                                      ? const Color(0xFF6366F1)
-                                      : const Color(0xFF1E293B),
-                                  foregroundColor: Colors.white,
+                                      ? const Color(0xFFF4A8C3)
+                                      : const Color(0xFF331D2C),
+                                  foregroundColor: _showSpanish
+                                      ? const Color(0xFF23101B)
+                                      : const Color(0xFFFCF4F7),
+                                  elevation: 0,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 8),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                     side: BorderSide(
                                       color: _showSpanish
-                                          ? const Color(0xFF818CF8)
-                                          : Colors.white
-                                              .withValues(alpha: 0.15),
+                                          ? const Color(0xFFF4A8C3)
+                                          : const Color(0xFFF4A8C3)
+                                              .withValues(alpha: 0.28),
                                     ),
                                   ),
                                 ),
@@ -1424,7 +1429,7 @@ class _ApodPageState extends State<ApodPage> {
                               IconButton(
                                 icon: const Icon(Icons.copy_rounded, size: 18),
                                 tooltip: 'Copiar explicación',
-                                color: Colors.grey.shade400,
+                                color: const Color(0xFFE2C6D2),
                                 onPressed: () {
                                   Clipboard.setData(
                                     ClipboardData(text: displayExplanation),
@@ -1433,14 +1438,19 @@ class _ApodPageState extends State<ApodPage> {
                                     SnackBar(
                                       behavior: SnackBarBehavior.floating,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(
+                                          color: const Color(0xFFF4A8C3)
+                                              .withValues(alpha: 0.25),
+                                        ),
                                       ),
                                       content: const Text(
-                                        'Texto copiado al portapapeles 📋',
+                                        'Texto copiado al portapapeles',
+                                        style: TextStyle(
+                                            color: Color(0xFFFCF4F7)),
                                       ),
                                       duration: const Duration(seconds: 2),
-                                      backgroundColor: const Color(0xFF1E293B),
+                                      backgroundColor: const Color(0xFF331D2C),
                                     ),
                                   );
                                 },
@@ -1455,20 +1465,20 @@ class _ApodPageState extends State<ApodPage> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF6366F1)
-                                    .withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(8),
+                                color: const Color(0xFFF4A8C3)
+                                    .withValues(alpha: 0.14),
+                                borderRadius: BorderRadius.circular(6),
                               ),
                               child: const Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.auto_awesome,
-                                      size: 13, color: Color(0xFF818CF8)),
+                                  Icon(Icons.translate_rounded,
+                                      size: 13, color: Color(0xFFF9C8DA)),
                                   SizedBox(width: 6),
                                   Text(
-                                    'Traducción automática (EN ➔ ES)',
+                                    'Traducción automática (EN → ES)',
                                     style: TextStyle(
-                                      color: Color(0xFFC7D2FE),
+                                      color: Color(0xFFF9C8DA),
                                       fontSize: 11,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -1483,11 +1493,11 @@ class _ApodPageState extends State<ApodPage> {
                           // Contenido del texto
                           SelectableText(
                             displayExplanation,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15,
                               height: 1.65,
-                              letterSpacing: 0.2,
-                              color: Colors.grey.shade200,
+                              letterSpacing: 0.15,
+                              color: Color(0xFFF5E9EE),
                             ),
                           ),
                         ],
@@ -1500,27 +1510,27 @@ class _ApodPageState extends State<ApodPage> {
           },
         ),
       ),
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.45),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _randomPhoto,
+        backgroundColor: const Color(0xFFF4A8C3),
+        foregroundColor: const Color(0xFF23101B),
+        elevation: 2,
+        highlightElevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: const Color(0xFFF9C8DA).withValues(alpha: 0.5),
+          ),
         ),
-        child: FloatingActionButton.extended(
-          onPressed: _randomPhoto,
-          backgroundColor: const Color(0xFF6366F1),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          highlightElevation: 0,
-          icon: const Icon(Icons.rocket_launch_rounded, size: 20),
-          label: const Text(
-            'Explorar Cosmos 🎲',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        icon: const Icon(Icons.shuffle_rounded, size: 18),
+        label: const Text(
+          'Archivo aleatorio',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+            letterSpacing: 0.2,
           ),
         ),
       ),
@@ -1701,7 +1711,7 @@ class _InAppVideoPlayerCardState extends State<InAppVideoPlayerCard> {
                             c,
                             allowScrubbing: true,
                             colors: const VideoProgressColors(
-                              playedColor: Color(0xFF6366F1),
+                              playedColor: Color(0xFFF4A8C3),
                               bufferedColor: Colors.white30,
                               backgroundColor: Colors.white12,
                             ),
@@ -1805,7 +1815,7 @@ class _InAppVideoPlayerCardState extends State<InAppVideoPlayerCard> {
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1)
+                            color: const Color(0xFFF4A8C3)
                                 .withValues(alpha: 0.88),
                             shape: BoxShape.circle,
                           ),
@@ -1818,13 +1828,13 @@ class _InAppVideoPlayerCardState extends State<InAppVideoPlayerCard> {
                       ),
                     if (controller.value.isBuffering)
                       const CircularProgressIndicator(
-                        color: Color(0xFF6366F1),
+                        color: Color(0xFFF4A8C3),
                       ),
                   ],
                 ),
               ),
               Container(
-                color: const Color(0xFF131B2E),
+                color: const Color(0xFF281723),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: Column(
@@ -1835,7 +1845,7 @@ class _InAppVideoPlayerCardState extends State<InAppVideoPlayerCard> {
                       allowScrubbing: true,
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       colors: const VideoProgressColors(
-                        playedColor: Color(0xFF6366F1),
+                        playedColor: Color(0xFFF4A8C3),
                         bufferedColor: Colors.white24,
                         backgroundColor: Colors.white10,
                       ),
@@ -1931,7 +1941,7 @@ class _InAppVideoPlayerCardState extends State<InAppVideoPlayerCard> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xFF131B2E), Color(0xFF1E1B4B)],
+                        colors: [Color(0xFF281723), Color(0xFF3E1F32)],
                       ),
                     ),
                   ),
@@ -1942,7 +1952,7 @@ class _InAppVideoPlayerCardState extends State<InAppVideoPlayerCard> {
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Color(0xFF131B2E), Color(0xFF1E1B4B)],
+                      colors: [Color(0xFF281723), Color(0xFF3E1F32)],
                     ),
                   ),
                 ),
@@ -1964,7 +1974,7 @@ class _InAppVideoPlayerCardState extends State<InAppVideoPlayerCard> {
                 const Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(color: Color(0xFF6366F1)),
+                    CircularProgressIndicator(color: Color(0xFFF4A8C3)),
                     SizedBox(height: 12),
                     Text(
                       'Cargando video...',
@@ -2014,11 +2024,11 @@ class _InAppVideoPlayerCardState extends State<InAppVideoPlayerCard> {
                   width: 68,
                   height: 68,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.92),
+                    color: const Color(0xFFF4A8C3).withValues(alpha: 0.92),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF6366F1).withValues(alpha: 0.5),
+                        color: const Color(0xFFF4A8C3).withValues(alpha: 0.5),
                         blurRadius: 18,
                         spreadRadius: 2,
                       ),

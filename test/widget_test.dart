@@ -7,7 +7,7 @@ void main() {
     await tester.pumpWidget(const MyApp());
     expect(find.byType(MyApp), findsOneWidget);
     expect(find.text('Foto Astronómica'), findsOneWidget);
-    expect(find.byIcon(Icons.calendar_month_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.calendar_today_outlined), findsOneWidget);
   });
 
   group('Apod.fromJson video extraction', () {
